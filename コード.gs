@@ -212,7 +212,7 @@ function execute(event){
             
           
           }
-          else if('もんすと'== user_message||'モンスト'== user_message||'モンスターストライク'== user_message||'もんすたーすとらいく'== user_message)  {
+          else if('モンスト'== user_message)  {
               
             // payload を作る(ユーザー側に送るデータで特殊な型)
               let payload = {
@@ -223,138 +223,129 @@ function execute(event){
                       'altText':'this is a flex message',
                       //↓このcontentsの部分にSimulatorのJSONをコピー
                       
-                      contents: {
+                      'contents': {
                         "type": "bubble",
                         "hero": {
                         "type": "image",
-                        "url": "https://scdn.line-apps.com/n/channel_devcenter/img/fx/01_1_cafe.png",
+                        "url": "https://appmedia.jp/wp-content/themes/appmedia/lib/monst/images/img/top_title_monst_2022.jpg",
                         "size": "full",
                         "aspectRatio": "20:13",
                         "aspectMode": "cover",
                         "action": {
                             "type": "uri",
-                            "uri":  "https://www.monster-strike.com/"
+                            "uri":  "https://static.monster-strike.com/line/?target=stage&pass_code=MjA2ODg1OTQwMDky"
                         }
                         },
-                        "body": {
-                        "type": "box",
-                        "layout": "vertical",
-                        "contents": [
-                            {
-                            "type": "text",
-                            "text": "モンスターストライク",
-                            "weight": "bold",
-                            "size": "xl"
-                            },
-                            {
-                            "type": "box",
-                            "layout": "baseline",
-                            "margin": "md",
-                            "contents": [
-                                {
-                                "type": "icon",
-                                "size": "sm",
-                                "url": "https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gold_star_28.png"
-                                },
-                                {
-                                "type": "icon",
-                                "size": "sm",
-                                "url": "https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gold_star_28.png"
-                                },
-                                {
-                                "type": "icon",
-                                "size": "sm",
-                                "url": "https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gold_star_28.png"
-                                },
-                                {
-                                "type": "icon",
-                                "size": "sm",
-                                "url": "https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gold_star_28.png"
-                                },
-                                {
-                                "type": "icon",
-                                "size": "sm",
-                                "url": "https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gray_star_28.png"
-                                },
-                                {
-                                "type": "text",
-                                "text": "4.0",
-                                "size": "sm",
-                                "color": "#999999",
-                                "margin": "md",
-                                "flex": 0
-                                }
-                            ]
-                            },
-                            {
-                            "type": "box",
-                            "layout": "vertical",
-                            "margin": "lg",
-                            "spacing": "sm",
-                            "contents": [
-                                {
-                                "type": "box",
-                                "layout": "baseline",
-                                "spacing": "sm",
-                                "contents": [
-                                    {
-                                    "type": "text",
-                                    "text": "Place",
-                                    "color": "#aaaaaa",
-                                    "size": "sm",
-                                    "flex": 1
-                                    },
-                                    {
-                                    "type": "text",
-                                    "text": "Miraina Tower, 4-1-6 Shinjuku, Tokyo",
-                                    "wrap": true,
-                                    "color": "#666666",
-                                    "size": "sm",
-                                    "flex": 5
-                                    }
-                                ]
-                                },
-                                {
-                                "type": "box",
-                                "layout": "baseline",
-                                "spacing": "sm",
-                                "contents": [
-                                    {
-                                    "type": "text",
-                                    "text": "Time",
-                                    "color": "#aaaaaa",
-                                    "size": "sm",
-                                    "flex": 1
-                                    },
-                                    {
-                                    "type": "text",
-                                    "text": "10:00 - 23:00",
-                                    "wrap": true,
-                                    "color": "#666666",
-                                    "size": "sm",
-                                    "flex": 5
-                                    }
-                                ]
-                                }
-                            ]
-                            }
-                        ]
-                        },
+                        // "body": {
+                        // "type": "box",
+                        // "layout": "vertical",
+                        // "contents": [
+                        //     {
+                        //     "type": "text",
+                        //     "text": "モンスターストライク",
+                        //     "weight": "bold",
+                        //     "size": "xl"
+                        //     },
+                        //     {
+                        //     "type": "box",
+                        //     "layout": "baseline",
+                        //     "margin": "md",
+                        //     "contents": [
+                        //         {
+                        //         "type": "icon",
+                        //         "size": "sm",
+                        //         "url": "https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gold_star_28.png"
+                        //         },
+                        //         {
+                        //         "type": "icon",
+                        //         "size": "sm",
+                        //         "url": "https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gold_star_28.png"
+                        //         },
+                        //         {
+                        //         "type": "icon",
+                        //         "size": "sm",
+                        //         "url": "https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gold_star_28.png"
+                        //         },
+                        //         {
+                        //         "type": "icon",
+                        //         "size": "sm",
+                        //         "url": "https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gold_star_28.png"
+                        //         },
+                        //         {
+                        //         "type": "icon",
+                        //         "size": "sm",
+                        //         "url": "https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gray_star_28.png"
+                        //         },
+                        //         {
+                        //         "type": "text",
+                        //         "text": "4.0",
+                        //         "size": "sm",
+                        //         "color": "#999999",
+                        //         "margin": "md",
+                        //         "flex": 0
+                        //         }
+                        //     ]
+                        //     },
+                        //     {
+                        //     "type": "box",
+                        //     "layout": "vertical",
+                        //     "margin": "lg",
+                        //     "spacing": "sm",
+                        //     "contents": [
+                        //         {
+                        //         "type": "box",
+                        //         "layout": "baseline",
+                        //         "spacing": "sm",
+                        //         "contents": [
+                        //             {
+                        //             "type": "text",
+                        //             "text": "Place",
+                        //             "color": "#aaaaaa",
+                        //             "size": "sm",
+                        //             "flex": 1
+                        //             },
+                        //             {
+                        //             "type": "text",
+                        //             "text": "Miraina Tower, 4-1-6 Shinjuku, Tokyo",
+                        //             "wrap": true,
+                        //             "color": "#666666",
+                        //             "size": "sm",
+                        //             "flex": 5
+                        //             }
+                        //         ]
+                        //         },
+                        //         {
+                        //         "type": "box",
+                        //         "layout": "baseline",
+                        //         "spacing": "sm",
+                        //         "contents": [
+                        //             {
+                        //             "type": "text",
+                        //             "text": "Time",
+                        //             "color": "#aaaaaa",
+                        //             "size": "sm",
+                        //             "flex": 1
+                        //             },
+                        //             {
+                        //             "type": "text",
+                        //             "text": "10:00 - 23:00",
+                        //             "wrap": true,
+                        //             "color": "#666666",
+                        //             "size": "sm",
+                        //             "flex": 5
+                        //             }
+                        //         ]
+                        //         }
+                        //     ]
+                        //     }
+                        // ]
+                        // },
                         "footer": {
                         "type": "box",
                         "layout": "vertical",
                         "spacing": "sm",
                         "contents": [
-                            {
-                            "type": "button",
-                            "style": "link",
-                            "height": "sm",
-                            "action": {
-                                "type": "uri",
-                                "label": "Game With攻略",
-                                "uri": "https://xn--eckwa2aa3a9c8j8bve9d.gamewith.jp/"
-                            }
-                            },
+
                             {
                             "type": "button",
                             "style": "link",
@@ -364,6 +355,17 @@ function execute(event){
                                 "label": "モンストを開く",
                                 "uri": "https://static.monster-strike.com/line/?target=stage&pass_code=MjA2ODg1OTQwMDky"
                             }
+                            },
+                            {
+                              // ---------------------モンスト--------------------------------------
+                              "type": "button",
+                              "style": "link",
+                              "height": "sm",
+                              "action": {
+                                "type": "message",
+                                "label": "-Game With-検索",
+                                "text": "-Game With-検索"
+                              }
                             },
                             {
                             "type": "spacer",
@@ -391,8 +393,22 @@ function execute(event){
 
             sendReplyMessage(payload);
 
+          }
+          else if ('-Game With-検索' == user_message) {
+            reply_messages = '検索したい内容を入力してください';
+            let payload = {
+              'replyToken': REPLY_TOKEN,　//特定の相手に返信するためのトークン
+              'messages': [{
+              'type': 'text',             //返信のタイプ
+              'text': reply_messages    //内容
+              }]
+            };
+
+
+            sendReplyMessage(payload);
+
           }     
-            // メッセージのそれ以外 
+          // メッセージのそれ以外 
           // else {
           //   reply_messages = '「' + user_message + '」ってこと！？';
           //   let payload = {
