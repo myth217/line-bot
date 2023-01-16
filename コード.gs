@@ -1,5 +1,7 @@
 //CHANNEL_ACCESS_TOKENを設定
 //LINE developerで登録をした、自分のCHANNEL_ACCESS_TOKENを入れて下さい
+//LINE developerで登録をした、自分のCHANNEL_ACCESS_TOKENを入れて下さい
+//LINE developerで登録をした、自分のCHANNEL_ACCESS_TOKENを入れて下さい
 var line_endpoint = 'https://api.line.me/v2/bot/message/reply';
 const SCRIPT_PROPERTIES = PropertiesService.getScriptProperties();  // スクリプトプロパティを取得
 const ACCESS_TOKEN = SCRIPT_PROPERTIES.getProperty("ACCESS_TOKEN");
