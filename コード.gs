@@ -28,13 +28,8 @@ function execute(event){
             function isNum(val){
               return !isNaN(val)
             }
-
           let num_check = isNum(user_message);
 
-          // 数値かどうか
-          // 現状は数値であった場合、どんな状態でもここを通る
-          // 数値でなかった場合 下の else ifに到達する
-          // それを最後まで繰り返す
           if(num_check == true) {
               // 文字列から数値に
               user_message = user_message - 0;
@@ -171,20 +166,11 @@ function execute(event){
                           "height": "sm",
                           "action": {
                             "type": "message",
-                            "text": "明日の天気",
+                            "text": "仕事系",
                             "label": "仕事系"
                           }
                         },
-                        {
-                          "type": "button",
-                          "style": "primary",
-                          "height": "sm",
-                          "action": {
-                            "type": "message",
-                            "label": "カレンダー",
-                            "text": "カレンダー"
-                          }
-                        },{
+{
                           "type": "button",
                           "style": "primary",
                           "height": "sm",
@@ -204,8 +190,6 @@ function execute(event){
 
             };
                 sendReplyMessage(payload);
-            
-          
           }
           else if('ツール' == user_message) {
             let payload = {
@@ -426,8 +410,7 @@ function execute(event){
               ]
             };
             sendReplyMessage(payload);
-          }
-          
+          }        
           else if('モンスト'== user_message)  {
               
             // payload を作る(ユーザー側に送るデータで特殊な型)
@@ -619,25 +602,8 @@ function execute(event){
               'text': reply_messages    //内容
               }]
             };
-
-
             sendReplyMessage(payload);
-
           }     
-          // メッセージのそれ以外 
-          // else {
-          //   reply_messages = '「' + user_message + '」ってこと！？';
-          //   let payload = {
-          //     'replyToken': REPLY_TOKEN,//特定の相手に返信するためのトークン
-          //     'messages': [{
-          //     'type': 'text',             //返信のタイプ
-          //     'text': reply_messages     //内容
-          //     }]
-          //   };
-          //   //payloadを渡す
-          //   sendReplyMessage(payload);
-          // }
-
       }
   }
 
