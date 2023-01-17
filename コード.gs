@@ -155,30 +155,109 @@ function execute(event){
                       "contents": [
                         {
 
-                          // ---------------------モンスト--------------------------------------
                           "type": "button",
                           "style": "primary",
                           "height": "sm",
                           "action": {
                             "type": "message",
-                            "label": "モンスト",
-                            "text": "モンスト"
+                            "label": "ツール",
+                            "text": "ツール"
                           }
                         },
                         {
 
-                          //-------------------------- ひろゆき----------------------------------------
                           "type": "button",
                           "style": "primary",
                           "height": "sm",
                           "action": {
                             "type": "message",
-                            "text": "ひろゆき",
-                            "label": "ひろゆき"
+                            "text": "明日の天気",
+                            "label": "仕事系"
                           }
                         },
                         {
-                          // --------------------------割り勘--------------------------------------
+                          "type": "button",
+                          "style": "primary",
+                          "height": "sm",
+                          "action": {
+                            "type": "message",
+                            "label": "カレンダー",
+                            "text": "カレンダー"
+                          }
+                        },{
+                          "type": "button",
+                          "style": "primary",
+                          "height": "sm",
+                          "action": {
+                            "type": "message",
+                            "label": "ゲーム",
+                            "text": "ゲーム"
+                          }
+                        }
+                      ],
+                      "flex": 0
+                    }
+                  }
+                  
+                }
+              ]
+
+            };
+                sendReplyMessage(payload);
+            
+          
+          }
+          else if('ツール' == user_message) {
+            let payload = {
+              "replyToken" : REPLY_TOKEN,
+              "messages" : [
+                {
+                  'type':'flex',//ここの宣言が必須
+                  'altText':'this is a flex message',
+                  'contents': {
+                    "type": "bubble",
+                    "body": {
+                      "type": "box",
+                      "layout": "vertical",
+                      "contents": [
+                        {
+                          "type": "text",
+                          "text": "ツール",
+                          "weight": "bold",
+                          "size": "xl",
+                          "align": "center"
+                        }
+                      ]
+                    },
+                    "footer": {
+                      "type": "box",
+                      "layout": "vertical",
+                      "spacing": "sm",
+                      "contents": [
+                        {
+
+                          "type": "button",
+                          "style": "primary",
+                          "height": "sm",
+                          "action": {
+                            "type": "message",
+                            "label": "明日の天気",
+                            "text": "明日の天気"
+                          }
+                        },
+                        {
+
+                          "type": "button",
+                          "style": "primary",
+                          "height": "sm",
+                          "action": {
+                            "type": "message",
+                            "label": "カレンダー",
+                            "text": "カレンダー"
+                          }
+                        },
+                        {
+
                           "type": "button",
                           "style": "primary",
                           "height": "sm",
@@ -189,17 +268,46 @@ function execute(event){
                           }
                         },
                         {
-                          // --------------------------カレンダー--------------------------------------
+
                           "type": "button",
                           "style": "primary",
                           "height": "sm",
                           "action": {
                             "type": "message",
-                            "label": "カレンダー",
-                            "text": "カレンダー"
+                            "label": "目的地",
+                            "text": "目的地"
                           }
-                        }
-
+                        },
+                        {
+                          "type": "button",
+                          "style": "primary",
+                          "height": "sm",
+                          "action": {
+                            "type": "message",
+                            "label": "財布管理",
+                            "text": "財布管理"
+                          }
+                        },
+                        {
+                          "type": "button",
+                          "style": "primary",
+                          "height": "sm",
+                          "action": {
+                            "type": "message",
+                            "label": "ランダム",
+                            "text": "ランダム"
+                          }
+                        },
+                        {
+                          "type": "button",
+                          "style": "primary",
+                          "height": "sm",
+                          "action": {
+                            "type": "message",
+                            "label": "家計簿",
+                            "text": "家計簿"
+                          }
+                        },
                       ],
                       "flex": 0
                     }
@@ -212,6 +320,114 @@ function execute(event){
             
           
           }
+          else if('仕事系' == user_message) {
+            let payload = {
+              "replyToken" : REPLY_TOKEN,
+              "messages" : [
+                {
+                  'type':'flex',//ここの宣言が必須
+                  'altText':'this is a flex message',
+                  'contents': {
+                    "type": "bubble",
+                    "body": {
+                      "type": "box",
+                      "layout": "vertical",
+                      "contents": [
+                        {
+                          "type": "text",
+                          "text": "仕事系",
+                          "weight": "bold",
+                          "size": "xl",
+                          "align": "center"
+                        }
+                      ]
+                    },
+                    "footer": {
+                      "type": "box",
+                      "layout": "vertical",
+                      "spacing": "sm",
+                      "contents": [
+                        {
+
+                          "type": "button",
+                          "style": "primary",
+                          "height": "sm",
+                          "action": {
+                            "type": "message",
+                            "label": "確定申告",
+                            "text": "確定申告"
+                          }
+                        }
+                      ],
+                      "flex": 0
+                    }
+                  }
+                  
+                }
+              ]
+            };
+                sendReplyMessage(payload);
+            
+          
+          }
+          else if('ゲーム' == user_message) {
+            let payload = {
+              "replyToken" : REPLY_TOKEN,
+              "messages" : [
+                {
+                  'type':'flex',//ここの宣言が必須
+                  'altText':'this is a flex message',
+                  'contents': {
+                    "type": "bubble",
+                    "body": {
+                      "type": "box",
+                      "layout": "vertical",
+                      "contents": [
+                        {
+                          "type": "text",
+                          "text": "ゲーム",
+                          "weight": "bold",
+                          "size": "xl",
+                          "align": "center"
+                        }
+                      ]
+                    },
+                    "footer": {
+                      "type": "box",
+                      "layout": "vertical",
+                      "spacing": "sm",
+                      "contents": [
+                        {
+                          "type": "button",
+                          "style": "primary",
+                          "height": "sm",
+                          "action": {
+                            "type": "message",
+                            "label": "モンスト",
+                            "text": "モンスト"
+                          }
+                        },
+                        {
+                          "type": "button",
+                          "style": "primary",
+                          "height": "sm",
+                          "action": {
+                            "type": "message",
+                            "label": "ブラックジャック",
+                            "text": "ブラックジャック"
+                          }
+                        },
+                      ],
+                      "flex": 0
+                    }
+                  }
+                  
+                }
+              ]
+            };
+            sendReplyMessage(payload);
+          }
+          
           else if('モンスト'== user_message)  {
               
             // payload を作る(ユーザー側に送るデータで特殊な型)
