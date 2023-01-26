@@ -3,15 +3,15 @@
 var line_endpoint = 'https://api.line.me/v2/bot/message/reply';
 const SCRIPT_PROPERTIES = PropertiesService.getScriptProperties();  // スクリプトプロパティを取得
 const ACCESS_TOKEN = SCRIPT_PROPERTIES.getProperty("ACCESS_TOKEN");
-const sheet_id = SCRIPT_PROPERTIES.getProperty("sheet_id");
-const sheet_name = SCRIPT_PROPERTIES.getProperty("sheet_name");
 
-const sheet = SpreadsheetApp.openById(sheet_id).getSheetByName(sheet_name);
+const sheet_url = SCRIPT_PROPERTIES.getProperty("sheet_url");
+let spread = SpreadsheetApp.openByUrl(sheet_url);
+  // スプレッドシート内のシート一覧を取得
+let sheets = spread.getSheets();
+  // 指定したシート(1番目)の左上に書き込み
 
-// let flg_list = 	[ 
-// ['項目名', '状態'],
-// ['warikan' , 'false']
-// ]
+  
+  let warikan_flg = sheets[0].getRange(2, 2).getValue();
 
 
 // イベントを受け取って実行する
@@ -21,7 +21,6 @@ function doPost(e){
     execute(event);
   }
 }
-
 // イベントを実行する
 function execute(event){
   const EVENT_TYPE = event.type;          // イベントのタイプ
@@ -106,7 +105,7 @@ function execute(event){
             };
             sendReplyMessage(payload);
           }
-          else if ('カレンダー' == user_message) {
+          if ('カレンダー' == user_message) {
             let payload = {
               "replyToken" : REPLY_TOKEN,
               "messages" : [
@@ -173,7 +172,7 @@ function execute(event){
             };
             sendReplyMessage(payload);
           }
-          else if('ツール' == user_message) {
+          if('ツール' == user_message) {
             let payload = {
               "replyToken" : REPLY_TOKEN,
               "messages" : [
@@ -280,7 +279,7 @@ function execute(event){
             };
             sendReplyMessage(payload);
           }
-          else if('仕事系' == user_message) {
+          if('仕事系' == user_message) {
             let payload = {
               "replyToken" : REPLY_TOKEN,
               "messages" : [
@@ -326,7 +325,7 @@ function execute(event){
             };
             sendReplyMessage(payload);
           }
-          else if('ゲーム' == user_message) {
+          if('ゲーム' == user_message) {
             let payload = {
               "replyToken" : REPLY_TOKEN,
               "messages" : [
@@ -383,7 +382,7 @@ function execute(event){
             };
             sendReplyMessage(payload);
           }        
-          else if('モンスト'== user_message)  {
+          if('モンスト'== user_message)  {
               let payload = {
                   "replyToken" : REPLY_TOKEN,
                   "messages" : [
@@ -444,7 +443,7 @@ function execute(event){
                 };
               sendReplyMessage(payload);
           }
-          else if ('割り勘' == user_message) {
+          if ('割り勘' == user_message) {
             let payload = {
               "replyToken" : REPLY_TOKEN,
               "messages" : [
@@ -479,7 +478,9 @@ function execute(event){
                             "type": "postback",
                             "label": "2人",
                             "data": "warikan_2",
+                            "inputOption": "openKeyboard",
                             "displayText": "２人"
+                            
                           }
                         },
                         {
@@ -490,6 +491,7 @@ function execute(event){
                             "type": "postback",
                             "label": "3人",
                             "data": "warikan_3",
+                            "inputOption": "openKeyboard",
                             "displayText": "３人"
                           }
                         },
@@ -501,6 +503,7 @@ function execute(event){
                             "type": "postback",
                             "label": "4人",
                             "data": "warikan_4",
+                            "inputOption": "openKeyboard",
                             "displayText": "4人"
                           }
                         },
@@ -512,20 +515,22 @@ function execute(event){
                             "type": "postback",
                             "label": "5人",
                             "data": "warikan_5",
+                            "inputOption": "openKeyboard",
                             "displayText": "5人"
                           }
                         },
-                        {
-                          "type": "button",
-                          "style": "secondary",
-                          "height": "sm",
-                          "action": {
-                            "type": "postback",
-                            "label": "その他",
-                            "data": "warikan_ex",
-                            "displayText": "その他"
-                          }
-                        }
+                        // {
+                        //   "type": "button",
+                        //   "style": "secondary",
+                        //   "height": "sm",
+                        //   "action": {
+                        //     "type": "postback",
+                        //     "label": "その他",
+                        //     "data": "warikan_ex",
+                        //     "inputOption": "openKeyboard",
+                        //     "displayText": "その他"
+                        //   }
+                        // }
                       ],
                       "flex": 0
                     }
@@ -535,18 +540,71 @@ function execute(event){
             };
             sendReplyMessage(payload);
           }
+          if (warikan_flg == true){
+            // 整数である
+              if (!isNaN(user_message)) {
+                user_message = user_message - 0 // 数値化
+            
+                let warikan_per = sheets[0].getRange(2, 3).getValue();
+                
+                // 結果       = 金額 / 人数
+                let result = user_message / warikan_per;
+    
+                reply_messages = '一人あたり \n ￥' +result;
+    
+                sheets[0].getRange(2, 2).setValue('false');  //シートのワリカンスイッチをoff
+                sheets[0].getRange(2, 3).setValue('');  //シートに割り勘人数をinit
+    
+                  let payload = {
+                    'replyToken': REPLY_TOKEN,//特定の相手に返信するためのトークン
+                    'messages': [{
+                    'type': 'text',             //返信のタイプ
+                    'text': reply_messages    //内容
+                    }]
+                  };
+                  sendReplyMessage(payload);
+              }
+          }
+
+
       }
   }
   else if(EVENT_TYPE === "postback"){    // ポストバックイベントの場合
     if (event.postback.data.includes('warikan')) {
-      // postback data を warikan_ と ～～ に分割
-      let select_warikan = event.postback.data.replace('warikan_', '');
-      // if(select_warikan[1] == 'ex') {
-      //   reply_messages = '人数を入力してください'
-      // }
+      
+      // postback data を warikan_ と 個数 に分割
+      let select_warikan = event.postback.data.split('_');
 
-      sheet.getRange(1, 1).setValue('gasから記録してみたお～～～');
+      sheets[0].getRange(2, 2).setValue('true');  //シートのワリカンスイッチをon
+      sheets[0].getRange(2, 3).setValue(select_warikan[1]);  //シートに割り勘数を記載
 
+
+      if(select_warikan[1] == 'ex') {
+        reply_messages = '人数を入力してください';
+        let payload = {
+          'replyToken': REPLY_TOKEN,　//特定の相手に返信するためのトークン
+          'messages': [{
+          'type': 'text',             //返信のタイプ
+          'text': reply_messages    //内容
+          }]
+        };
+        sendReplyMessage(payload);
+      }
+
+
+      reply_messages = "金額を入力して下さい"
+      let payload = {
+        'replyToken': REPLY_TOKEN,//特定の相手に返信するためのトークン
+        'messages': [{
+        'type': 'text',             //返信のタイプ
+        'text': reply_messages    //内容
+        }]
+      };
+      sendReplyMessage(payload);
+
+
+      sendReplyMessage(payload);
+    
     }
   }
 }
@@ -565,3 +623,6 @@ function sendReplyMessage(payload){
   });
   return RES;
 }
+
+
+
