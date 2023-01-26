@@ -4,6 +4,16 @@ var line_endpoint = 'https://api.line.me/v2/bot/message/reply';
 const SCRIPT_PROPERTIES = PropertiesService.getScriptProperties();  // スクリプトプロパティを取得
 const ACCESS_TOKEN = SCRIPT_PROPERTIES.getProperty("ACCESS_TOKEN");
 
+const sheet_url = SCRIPT_PROPERTIES.getProperty("sheet_url");
+let spread = SpreadsheetApp.openByUrl(sheet_url);
+  // スプレッドシート内のシート一覧を取得
+let sheets = spread.getSheets();
+  // 指定したシート(1番目)の左上に書き込み
+
+  
+  let warikan_flg = sheets[0].getRange(2, 2).getValue();
+
+
 // イベントを受け取って実行する
 function doPost(e){
   const EVENTS = JSON.parse(e.postData.contents).events;
@@ -14,114 +24,21 @@ function doPost(e){
 // イベントを実行する
 function execute(event){
   const EVENT_TYPE = event.type;          // イベントのタイプ
-  const USER_ID = event.source.userId;    // 送信元ユーザーのID
+
   const REPLY_TOKEN = event.replyToken;   // 応答メッセージを送る際に使用する応答トークン
   let reply_messages = '';
+  let event_source_type = event.source.type;
+  const USER_ID = event.source.userId;    // 送信元ユーザーのID　どのタイプの部屋でも取得が可能
 
   if(EVENT_TYPE === "follow"){            // フォローイベントの場合
   }
-
-  else if(EVENT_TYPE === "message"){   //メッセージであった場合
+  else if(EVENT_TYPE === "message"){     //メッセージであった場合
           // メッセージイベントの場合
       if(event.message.type === "text"){    // メッセージでなおかつテキストであった場合
-        let user_message = event.message.text;      // 受け取ったテキスト
-            function isNum(val){
-              return !isNaN(val)
-            }
-          let num_check = isNum(user_message);
 
-          if(num_check == true) {
-              // 文字列から数値に
-              user_message = user_message - 0;
-              // ÷2
-              user_message =  user_message / 2;
-              //変数reply_messages に代入する
-              reply_messages = '￥' + user_message + '円です。';
-            let payload = {
-              'replyToken': REPLY_TOKEN,　//特定の相手に返信するためのトークン
-              'messages': [{
-              'type': 'text',             //返信のタイプ
-              'text': reply_messages    //内容
-              }]
-            };
-              //payloadを渡す
-                sendReplyMessage(payload);
-          }
-          else if ('カレンダー' == user_message) {
-            let payload = {
-              "replyToken" : REPLY_TOKEN,
-              "messages" : [
-                {
-                  'type':'flex',//ここの宣言が必須
-                  'altText':'this is a flex message',
-                  'contents': {
-                    "type": "bubble",
-                    "body": {
-                      "type": "box",
-                      "layout": "vertical",
-                      "contents": [
-                        {
-                          "type": "text",
-                          "text": "カレンダー",
-                          "weight": "bold",
-                          "size": "xl",
-                          "align": "center"
-                        }
-                      ]
-                    },
-                    "footer": {
-                      "type": "box",
-                      "layout": "vertical",
-                      "spacing": "sm",
-                      "contents": [
-                        {
+          let user_message = event.message.text;      // 受け取ったテキスト
 
-                          // ---------------------予定追加--------------------------------------
-                          "type": "button",
-                          "style": "primary",
-                          "height": "sm",
-                          "action": {
-                            "type": "message",
-                            "label": "予定追加",
-                            "text": "予定追加"
-                          }
-                        },
-                        {
-
-                          //-------------------------- 予定確認----------------------------------------
-                          "type": "button",
-                          "style": "primary",
-                          "height": "sm",
-                          "action": {
-                            "type": "message",
-                            "text": "予定確認",
-                            "label": "予定確認"
-                          }
-                        },
-                        {
-                          // --------------------------割り勘--------------------------------------
-                          "type": "button",
-                          "style": "primary",
-                          "height": "sm",
-                          "action": {
-                            "type": "message",
-                            "label": "予定削除",
-                            "text": "予定削除"
-                          }
-                        },
-                      ],
-                      "flex": 0
-                    }
-                  }
-                  
-                }
-              ]
-            };
-
-            sendReplyMessage(payload);
-
-          }
-          else if('メニュー' == user_message) {
+          if('メニュー' == user_message) {
             let payload = {
               "replyToken" : REPLY_TOKEN,
               "messages" : [
@@ -149,7 +66,6 @@ function execute(event){
                       "spacing": "sm",
                       "contents": [
                         {
-
                           "type": "button",
                           "style": "primary",
                           "height": "sm",
@@ -160,7 +76,6 @@ function execute(event){
                           }
                         },
                         {
-
                           "type": "button",
                           "style": "primary",
                           "height": "sm",
@@ -170,7 +85,7 @@ function execute(event){
                             "label": "仕事系"
                           }
                         },
-{
+                        {
                           "type": "button",
                           "style": "primary",
                           "height": "sm",
@@ -187,11 +102,77 @@ function execute(event){
                   
                 }
               ]
-
             };
-                sendReplyMessage(payload);
+            sendReplyMessage(payload);
           }
-          else if('ツール' == user_message) {
+          if ('カレンダー' == user_message) {
+            let payload = {
+              "replyToken" : REPLY_TOKEN,
+              "messages" : [
+                {
+                  'type':'flex',//ここの宣言が必須
+                  'altText':'this is a flex message',
+                  'contents': {
+                    "type": "bubble",
+                    "body": {
+                      "type": "box",
+                      "layout": "vertical",
+                      "contents": [
+                        {
+                          "type": "text",
+                          "text": "カレンダー",
+                          "weight": "bold",
+                          "size": "xl",
+                          "align": "center"
+                        }
+                      ]
+                    },
+                    "footer": {
+                      "type": "box",
+                      "layout": "vertical",
+                      "spacing": "sm",
+                      "contents": [
+                        {
+                          "type": "button",
+                          "style": "primary",
+                          "height": "sm",
+                          "action": {
+                            "type": "message",
+                            "label": "予定追加",
+                            "text": "予定追加"
+                          }
+                        },
+                        {
+                          "type": "button",
+                          "style": "primary",
+                          "height": "sm",
+                          "action": {
+                            "type": "message",
+                            "text": "予定確認",
+                            "label": "予定確認"
+                          }
+                        },
+                        {
+                          "type": "button",
+                          "style": "primary",
+                          "height": "sm",
+                          "action": {
+                            "type": "message",
+                            "label": "予定削除",
+                            "text": "予定削除"
+                          }
+                        },
+                      ],
+                      "flex": 0
+                    }
+                  }
+                  
+                }
+              ]
+            };
+            sendReplyMessage(payload);
+          }
+          if('ツール' == user_message) {
             let payload = {
               "replyToken" : REPLY_TOKEN,
               "messages" : [
@@ -219,7 +200,6 @@ function execute(event){
                       "spacing": "sm",
                       "contents": [
                         {
-
                           "type": "button",
                           "style": "primary",
                           "height": "sm",
@@ -230,7 +210,6 @@ function execute(event){
                           }
                         },
                         {
-
                           "type": "button",
                           "style": "primary",
                           "height": "sm",
@@ -241,7 +220,6 @@ function execute(event){
                           }
                         },
                         {
-
                           "type": "button",
                           "style": "primary",
                           "height": "sm",
@@ -252,7 +230,6 @@ function execute(event){
                           }
                         },
                         {
-
                           "type": "button",
                           "style": "primary",
                           "height": "sm",
@@ -300,11 +277,9 @@ function execute(event){
                 }
               ]
             };
-                sendReplyMessage(payload);
-            
-          
+            sendReplyMessage(payload);
           }
-          else if('仕事系' == user_message) {
+          if('仕事系' == user_message) {
             let payload = {
               "replyToken" : REPLY_TOKEN,
               "messages" : [
@@ -332,7 +307,6 @@ function execute(event){
                       "spacing": "sm",
                       "contents": [
                         {
-
                           "type": "button",
                           "style": "primary",
                           "height": "sm",
@@ -346,15 +320,12 @@ function execute(event){
                       "flex": 0
                     }
                   }
-                  
                 }
               ]
             };
-                sendReplyMessage(payload);
-            
-          
+            sendReplyMessage(payload);
           }
-          else if('ゲーム' == user_message) {
+          if('ゲーム' == user_message) {
             let payload = {
               "replyToken" : REPLY_TOKEN,
               "messages" : [
@@ -411,9 +382,7 @@ function execute(event){
             };
             sendReplyMessage(payload);
           }        
-          else if('モンスト'== user_message)  {
-              
-            // payload を作る(ユーザー側に送るデータで特殊な型)
+          if('モンスト'== user_message)  {
               let payload = {
                   "replyToken" : REPLY_TOKEN,
                   "messages" : [
@@ -435,110 +404,6 @@ function execute(event){
                             "uri":  "https://static.monster-strike.com/line/?target=stage&pass_code=MjA2ODg1OTQwMDky"
                         }
                         },
-                        // "body": {
-                        // "type": "box",
-                        // "layout": "vertical",
-                        // "contents": [
-                        //     {
-                        //     "type": "text",
-                        //     "text": "モンスターストライク",
-                        //     "weight": "bold",
-                        //     "size": "xl"
-                        //     },
-                        //     {
-                        //     "type": "box",
-                        //     "layout": "baseline",
-                        //     "margin": "md",
-                        //     "contents": [
-                        //         {
-                        //         "type": "icon",
-                        //         "size": "sm",
-                        //         "url": "https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gold_star_28.png"
-                        //         },
-                        //         {
-                        //         "type": "icon",
-                        //         "size": "sm",
-                        //         "url": "https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gold_star_28.png"
-                        //         },
-                        //         {
-                        //         "type": "icon",
-                        //         "size": "sm",
-                        //         "url": "https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gold_star_28.png"
-                        //         },
-                        //         {
-                        //         "type": "icon",
-                        //         "size": "sm",
-                        //         "url": "https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gold_star_28.png"
-                        //         },
-                        //         {
-                        //         "type": "icon",
-                        //         "size": "sm",
-                        //         "url": "https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gray_star_28.png"
-                        //         },
-                        //         {
-                        //         "type": "text",
-                        //         "text": "4.0",
-                        //         "size": "sm",
-                        //         "color": "#999999",
-                        //         "margin": "md",
-                        //         "flex": 0
-                        //         }
-                        //     ]
-                        //     },
-                        //     {
-                        //     "type": "box",
-                        //     "layout": "vertical",
-                        //     "margin": "lg",
-                        //     "spacing": "sm",
-                        //     "contents": [
-                        //         {
-                        //         "type": "box",
-                        //         "layout": "baseline",
-                        //         "spacing": "sm",
-                        //         "contents": [
-                        //             {
-                        //             "type": "text",
-                        //             "text": "Place",
-                        //             "color": "#aaaaaa",
-                        //             "size": "sm",
-                        //             "flex": 1
-                        //             },
-                        //             {
-                        //             "type": "text",
-                        //             "text": "Miraina Tower, 4-1-6 Shinjuku, Tokyo",
-                        //             "wrap": true,
-                        //             "color": "#666666",
-                        //             "size": "sm",
-                        //             "flex": 5
-                        //             }
-                        //         ]
-                        //         },
-                        //         {
-                        //         "type": "box",
-                        //         "layout": "baseline",
-                        //         "spacing": "sm",
-                        //         "contents": [
-                        //             {
-                        //             "type": "text",
-                        //             "text": "Time",
-                        //             "color": "#aaaaaa",
-                        //             "size": "sm",
-                        //             "flex": 1
-                        //             },
-                        //             {
-                        //             "type": "text",
-                        //             "text": "10:00 - 23:00",
-                        //             "wrap": true,
-                        //             "color": "#666666",
-                        //             "size": "sm",
-                        //             "flex": 5
-                        //             }
-                        //         ]
-                        //         }
-                        //     ]
-                        //     }
-                        // ]
-                        // },
                         "footer": {
                         "type": "box",
                         "layout": "vertical",
@@ -556,14 +421,13 @@ function execute(event){
                             }
                             },
                             {
-                              // ---------------------モンスト--------------------------------------
                               "type": "button",
                               "style": "link",
                               "height": "sm",
                               "action": {
-                                "type": "message",
-                                "label": "-Game With-検索",
-                                "text": "-Game With-検索"
+                                "type": "uri",
+                                "label": "gamewithを開く",
+                                "uri": "https://gamewith.jp/"
                               }
                             },
                             {
@@ -573,57 +437,178 @@ function execute(event){
                         ],
                         "flex": 0
                         }
-                    } //contensここまで コピペで持ってきたJSON
+                    } 
                     }
                   ]
                 };
-                sendReplyMessage(payload);
+              sendReplyMessage(payload);
           }
-          else if ('割り勘' == user_message) {
-            reply_messages = '金額を入力してください';
+          if ('割り勘' == user_message) {
             let payload = {
-              'replyToken': REPLY_TOKEN,　//特定の相手に返信するためのトークン
-              'messages': [{
-              'type': 'text',             //返信のタイプ
-              'text': reply_messages    //内容
-              }]
+              "replyToken" : REPLY_TOKEN,
+              "messages" : [
+                {
+                  'type':'flex',//ここの宣言が必須
+                  'altText':'this is a flex message',                  
+                  'contents':
+                  {
+                    "type": "bubble",
+                    "body": {
+                      "type": "box",
+                      "layout": "vertical",
+                      "contents": [
+                        {
+                          "type": "text",
+                          "weight": "bold",
+                          "size": "md",
+                          "text": "人数を選択してくださいませ"
+                        }
+                      ]
+                    },
+                    "footer": {
+                      "type": "box",
+                      "layout": "vertical",
+                      "spacing": "sm",
+                      "contents": [
+                        {
+                          "type": "button",
+                          "style": "secondary",
+                          "height": "sm",
+                          "action": {
+                            "type": "postback",
+                            "label": "2人",
+                            "data": "warikan_2",
+                            "inputOption": "openKeyboard",
+                            "displayText": "２人"
+                            
+                          }
+                        },
+                        {
+                          "type": "button",
+                          "style": "secondary",
+                          "height": "sm",
+                          "action": {
+                            "type": "postback",
+                            "label": "3人",
+                            "data": "warikan_3",
+                            "inputOption": "openKeyboard",
+                            "displayText": "３人"
+                          }
+                        },
+                        {
+                          "type": "button",
+                          "style": "secondary",
+                          "height": "sm",
+                          "action": {
+                            "type": "postback",
+                            "label": "4人",
+                            "data": "warikan_4",
+                            "inputOption": "openKeyboard",
+                            "displayText": "4人"
+                          }
+                        },
+                        {
+                          "type": "button",
+                          "style": "secondary",
+                          "height": "sm",
+                          "action": {
+                            "type": "postback",
+                            "label": "5人",
+                            "data": "warikan_5",
+                            "inputOption": "openKeyboard",
+                            "displayText": "5人"
+                          }
+                        },
+                        // {
+                        //   "type": "button",
+                        //   "style": "secondary",
+                        //   "height": "sm",
+                        //   "action": {
+                        //     "type": "postback",
+                        //     "label": "その他",
+                        //     "data": "warikan_ex",
+                        //     "inputOption": "openKeyboard",
+                        //     "displayText": "その他"
+                        //   }
+                        // }
+                      ],
+                      "flex": 0
+                    }
+                  }
+                }
+              ]
             };
-
-
             sendReplyMessage(payload);
-
           }
-          else if ('-Game With-検索' == user_message) {
-            reply_messages = '検索したい内容を入力してください';
-            let payload = {
-              'replyToken': REPLY_TOKEN,　//特定の相手に返信するためのトークン
-              'messages': [{
-              'type': 'text',             //返信のタイプ
-              'text': reply_messages    //内容
-              }]
-            };
-            sendReplyMessage(payload);
-          }     
+          if (warikan_flg == true){
+            // 整数である
+              if (!isNaN(user_message)) {
+                user_message = user_message - 0 // 数値化
+            
+                let warikan_per = sheets[0].getRange(2, 3).getValue();
+                
+                // 結果       = 金額 / 人数
+                let result = user_message / warikan_per;
+    
+                reply_messages = '一人あたり \n ￥' +result;
+    
+                sheets[0].getRange(2, 2).setValue('false');  //シートのワリカンスイッチをoff
+                sheets[0].getRange(2, 3).setValue('');  //シートに割り勘人数をinit
+    
+                  let payload = {
+                    'replyToken': REPLY_TOKEN,//特定の相手に返信するためのトークン
+                    'messages': [{
+                    'type': 'text',             //返信のタイプ
+                    'text': reply_messages    //内容
+                    }]
+                  };
+                  sendReplyMessage(payload);
+              }
+          }
+
+
       }
   }
+  else if(EVENT_TYPE === "postback"){    // ポストバックイベントの場合
+    if (event.postback.data.includes('warikan')) {
+      
+      // postback data を warikan_ と 個数 に分割
+      let select_warikan = event.postback.data.split('_');
 
-  else if(EVENT_TYPE === "postback"){     // ポストバックイベントの場合
-            const PB_DATA = event.postback.data;  // ポストバックデータ
-            // payload を作る(ユーザー側に送るデータ)
-            let payload = {
-              'replyToken': REPLY_TOKEN,//特定の相手に返信するためのトークン
-              'messages': [{
-                "type": "postback",
-                "label": "num",
-                "data": "1",
-                "displayText": reply_messages,
-                "inputOption": "openKeyboard",
-              }]
-          };
+      sheets[0].getRange(2, 2).setValue('true');  //シートのワリカンスイッチをon
+      sheets[0].getRange(2, 3).setValue(select_warikan[1]);  //シートに割り勘数を記載
+
+
+      if(select_warikan[1] == 'ex') {
+        reply_messages = '人数を入力してください';
+        let payload = {
+          'replyToken': REPLY_TOKEN,　//特定の相手に返信するためのトークン
+          'messages': [{
+          'type': 'text',             //返信のタイプ
+          'text': reply_messages    //内容
+          }]
+        };
+        sendReplyMessage(payload);
+      }
+
+
+      reply_messages = "金額を入力して下さい"
+      let payload = {
+        'replyToken': REPLY_TOKEN,//特定の相手に返信するためのトークン
+        'messages': [{
+        'type': 'text',             //返信のタイプ
+        'text': reply_messages    //内容
+        }]
+      };
+      sendReplyMessage(payload);
+
+
+      sendReplyMessage(payload);
+    
+    }
   }
 }
 
-// ここはユーザー側にbotから返信している
 // function execute(event){} 内部 で sendReplyMessage()を呼び出す
 function sendReplyMessage(payload){
   const URL = "https://api.line.me/v2/bot/message/reply";
@@ -638,3 +623,6 @@ function sendReplyMessage(payload){
   });
   return RES;
 }
+
+
+
