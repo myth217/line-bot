@@ -551,7 +551,7 @@ function execute(event){
                 // 結果       = 金額 / 人数
                 let result = user_message / warikan_per;
     
-                reply_messages = '一人あたり \n ￥' +result;
+                reply_messages = '一人あたり \n ￥' + result + ' (' + warikan_per + '人)' ;
     
                 sheets[0].getRange(2, 2).setValue('false');  //シートのワリカンスイッチをoff
                 sheets[0].getRange(2, 3).setValue('');  //シートに割り勘人数をinit
@@ -593,7 +593,7 @@ function execute(event){
       }
 
 
-      reply_messages = "金額を入力して下さい \n 割り勘人数:" + select_warikan[1] + '人';
+      reply_messages = '金額を入力してくだちぃ';
 
       let payload = {
         'replyToken': REPLY_TOKEN,//特定の相手に返信するためのトークン
