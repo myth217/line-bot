@@ -10,8 +10,7 @@ let spread = SpreadsheetApp.openByUrl(sheet_url);
 let sheets = spread.getSheets();
   // 指定したシート(1番目)の左上に書き込み
 
-  
-  let warikan_flg = sheets[0].getRange(2, 2).getValue();
+
 
 
 // イベントを受け取って実行する
@@ -540,6 +539,8 @@ function execute(event){
             };
             sendReplyMessage(payload);
           }
+
+          let warikan_flg = sheets[0].getRange(2, 2).getValue();
           if (warikan_flg == true){
             // 整数である
               if (!isNaN(user_message)) {
@@ -592,7 +593,8 @@ function execute(event){
       }
 
 
-      reply_messages = "金額を入力して下さい"
+      reply_messages = "金額を入力して下さい \n 割り勘人数:" + select_warikan[1] + '人';
+
       let payload = {
         'replyToken': REPLY_TOKEN,//特定の相手に返信するためのトークン
         'messages': [{
@@ -601,10 +603,6 @@ function execute(event){
         }]
       };
       sendReplyMessage(payload);
-
-
-      sendReplyMessage(payload);
-    
     }
   }
 }
