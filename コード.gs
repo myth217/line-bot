@@ -554,7 +554,7 @@ function execute(event){
                       "contents": [
                         {
                           "type": "text",
-                          "text": "現在地を入力してください",
+                          "text": "目的地メニュー",
                           "weight": "bold",
                           "size": "xl",
                           "align": "center"
@@ -572,11 +572,22 @@ function execute(event){
                           "height": "sm",
                           "action": {
                             "type": "uri",
-                            "label": "現在地を送信してください",
+                            "label": "現在地を送信",
                             "uri": "https://line.me/R/nv/location/"
                           }
-                        }
+                        },
+                        {
+                          "type": "button",
+                          "style": "primary",
+                          "height": "sm",
+                          "action": {
+                            "type": "uri",
+                            "label": "目的地を送信",
+                            "uri": "https://line.me/R/nv/location/"
+                          }
+                        },
                       ],
+                      
                       "flex": 0
                     }
                   }
