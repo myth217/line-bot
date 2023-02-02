@@ -3,15 +3,11 @@
 var line_endpoint = 'https://api.line.me/v2/bot/message/reply';
 const SCRIPT_PROPERTIES = PropertiesService.getScriptProperties();  // スクリプトプロパティを取得
 const ACCESS_TOKEN = SCRIPT_PROPERTIES.getProperty("ACCESS_TOKEN");
-
 const sheet_url = SCRIPT_PROPERTIES.getProperty("sheet_url");
 let spread = SpreadsheetApp.openByUrl(sheet_url);
   // スプレッドシート内のシート一覧を取得
 let sheets = spread.getSheets();
   // 指定したシート(1番目)の左上に書き込み
-
-
-
 
 // イベントを受け取って実行する
 function doPost(e){
@@ -34,9 +30,7 @@ function execute(event){
   else if(EVENT_TYPE === "message"){     //メッセージであった場合
           // メッセージイベントの場合
       if(event.message.type === "text"){    // メッセージでなおかつテキストであった場合
-
           let user_message = event.message.text;      // 受け取ったテキスト
-
           if('メニュー' == user_message) {
             let payload = {
               "replyToken" : REPLY_TOKEN,
@@ -623,8 +617,6 @@ function execute(event){
                   sendReplyMessage(payload);
               }
           }
-
-
       }
   }
   else if(EVENT_TYPE === "postback"){    // ポストバックイベントの場合
@@ -663,7 +655,6 @@ function execute(event){
     }
   }
 }
-
 // function execute(event){} 内部 で sendReplyMessage()を呼び出す
 function sendReplyMessage(payload){
   const URL = "https://api.line.me/v2/bot/message/reply";
@@ -679,320 +670,73 @@ function sendReplyMessage(payload){
   return RES;
 }
 
+// ＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝line notify＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 
 
+// 通知機能
+function push_message() {
+  var today = new Date();
+  var toWeekday = toWD(today);
+  var msgWeatherForecast = getTemperatureForecast();
+  
+  const token = 'MEybmPAgCfaX5c6OvujcLCHWkRVDSktN5ClMBKWkTaj';
 
+    var options =
+    {
+      "method"  : "post",
+      "payload" : {
+                  //  "imageThumbnail" :"https://cdn-ak.f.st-hatena.com/images/fotolife/y/yukibnb/20190210/20190210134818_120.jpg", //最大240x240pxのJPG画像
+                  //  "imageFullsize" :"https://cdn-ak.f.st-hatena.com/images/fotolife/y/yukibnb/20190210/20190210134818_120.jpg",  //最大1024x1024pxのJPG画像
+                    "message": "今日は" +Utilities.formatDate( today, 'Asia/Tokyo', 'yyyy-M-d') + toWeekday + "だよ！\n"
+                    + msgWeatherForecast[0] + msgWeatherForecast[1] + msgWeatherForecast[2],
+                  }, 
+      "headers" : {"Authorization" : "Bearer "+ token}
+  
+    };
+    UrlFetchApp.fetch("https://notify-api.line.me/api/notify", options);
+  
+}
 
-// {
-//   "type": "bubble",
-//   "size": "mega",
-//   "header": {
-//     "type": "box",
-//     "layout": "vertical",
-//     "contents": [
-//       {
-//         "type": "box",
-//         "layout": "vertical",
-//         "contents": [
-//           {
-//             "type": "text",
-//             "text": "FROM",
-//             "color": "#ffffff66",
-//             "size": "sm"
-//           },
-//           {
-//             "type": "text",
-//             "text": "Akihabara",
-//             "color": "#ffffff",
-//             "size": "xl",
-//             "flex": 4,
-//             "weight": "bold"
-//           }
-//         ]
-//       },
-//       {
-//         "type": "box",
-//         "layout": "vertical",
-//         "contents": [
-//           {
-//             "type": "text",
-//             "text": "TO",
-//             "color": "#ffffff66",
-//             "size": "sm"
-//           },
-//           {
-//             "type": "text",
-//             "text": "Shinjuku",
-//             "color": "#ffffff",
-//             "size": "xl",
-//             "flex": 4,
-//             "weight": "bold"
-//           }
-//         ]
-//       }
-//     ],
-//     "paddingAll": "20px",
-//     "backgroundColor": "#0367D3",
-//     "spacing": "md",
-//     "height": "154px",
-//     "paddingTop": "22px"
-//   },
-//   "body": {
-//     "type": "box",
-//     "layout": "vertical",
-//     "contents": [
-//       {
-//         "type": "text",
-//         "text": "Total: 1 hour",
-//         "color": "#b7b7b7",
-//         "size": "xs"
-//       },
-//       {
-//         "type": "box",
-//         "layout": "horizontal",
-//         "contents": [
-//           {
-//             "type": "text",
-//             "text": "20:30",
-//             "size": "sm",
-//             "gravity": "center"
-//           },
-//           {
-//             "type": "box",
-//             "layout": "vertical",
-//             "contents": [
-//               {
-//                 "type": "filler"
-//               },
-//               {
-//                 "type": "box",
-//                 "layout": "vertical",
-//                 "contents": [],
-//                 "cornerRadius": "30px",
-//                 "height": "12px",
-//                 "width": "12px",
-//                 "borderColor": "#EF454D",
-//                 "borderWidth": "2px"
-//               },
-//               {
-//                 "type": "filler"
-//               }
-//             ],
-//             "flex": 0
-//           },
-//           {
-//             "type": "text",
-//             "text": "Akihabara",
-//             "gravity": "center",
-//             "flex": 4,
-//             "size": "sm"
-//           }
-//         ],
-//         "spacing": "lg",
-//         "cornerRadius": "30px",
-//         "margin": "xl"
-//       },
-//       {
-//         "type": "box",
-//         "layout": "horizontal",
-//         "contents": [
-//           {
-//             "type": "box",
-//             "layout": "baseline",
-//             "contents": [
-//               {
-//                 "type": "filler"
-//               }
-//             ],
-//             "flex": 1
-//           },
-//           {
-//             "type": "box",
-//             "layout": "vertical",
-//             "contents": [
-//               {
-//                 "type": "box",
-//                 "layout": "horizontal",
-//                 "contents": [
-//                   {
-//                     "type": "filler"
-//                   },
-//                   {
-//                     "type": "box",
-//                     "layout": "vertical",
-//                     "contents": [],
-//                     "width": "2px",
-//                     "backgroundColor": "#B7B7B7"
-//                   },
-//                   {
-//                     "type": "filler"
-//                   }
-//                 ],
-//                 "flex": 1
-//               }
-//             ],
-//             "width": "12px"
-//           },
-//           {
-//             "type": "text",
-//             "text": "Walk 4min",
-//             "gravity": "center",
-//             "flex": 4,
-//             "size": "xs",
-//             "color": "#8c8c8c"
-//           }
-//         ],
-//         "spacing": "lg",
-//         "height": "64px"
-//       },
-//       {
-//         "type": "box",
-//         "layout": "horizontal",
-//         "contents": [
-//           {
-//             "type": "box",
-//             "layout": "horizontal",
-//             "contents": [
-//               {
-//                 "type": "text",
-//                 "text": "20:34",
-//                 "gravity": "center",
-//                 "size": "sm"
-//               }
-//             ],
-//             "flex": 1
-//           },
-//           {
-//             "type": "box",
-//             "layout": "vertical",
-//             "contents": [
-//               {
-//                 "type": "filler"
-//               },
-//               {
-//                 "type": "box",
-//                 "layout": "vertical",
-//                 "contents": [],
-//                 "cornerRadius": "30px",
-//                 "width": "12px",
-//                 "height": "12px",
-//                 "borderWidth": "2px",
-//                 "borderColor": "#6486E3"
-//               },
-//               {
-//                 "type": "filler"
-//               }
-//             ],
-//             "flex": 0
-//           },
-//           {
-//             "type": "text",
-//             "text": "Ochanomizu",
-//             "gravity": "center",
-//             "flex": 4,
-//             "size": "sm"
-//           }
-//         ],
-//         "spacing": "lg",
-//         "cornerRadius": "30px"
-//       },
-//       {
-//         "type": "box",
-//         "layout": "horizontal",
-//         "contents": [
-//           {
-//             "type": "box",
-//             "layout": "baseline",
-//             "contents": [
-//               {
-//                 "type": "filler"
-//               }
-//             ],
-//             "flex": 1
-//           },
-//           {
-//             "type": "box",
-//             "layout": "vertical",
-//             "contents": [
-//               {
-//                 "type": "box",
-//                 "layout": "horizontal",
-//                 "contents": [
-//                   {
-//                     "type": "filler"
-//                   },
-//                   {
-//                     "type": "box",
-//                     "layout": "vertical",
-//                     "contents": [],
-//                     "width": "2px",
-//                     "backgroundColor": "#6486E3"
-//                   },
-//                   {
-//                     "type": "filler"
-//                   }
-//                 ],
-//                 "flex": 1
-//               }
-//             ],
-//             "width": "12px"
-//           },
-//           {
-//             "type": "text",
-//             "text": "Metro 1hr",
-//             "gravity": "center",
-//             "flex": 4,
-//             "size": "xs",
-//             "color": "#8c8c8c"
-//           }
-//         ],
-//         "spacing": "lg",
-//         "height": "64px"
-//       },
-//       {
-//         "type": "box",
-//         "layout": "horizontal",
-//         "contents": [
-//           {
-//             "type": "text",
-//             "text": "20:40",
-//             "gravity": "center",
-//             "size": "sm"
-//           },
-//           {
-//             "type": "box",
-//             "layout": "vertical",
-//             "contents": [
-//               {
-//                 "type": "filler"
-//               },
-//               {
-//                 "type": "box",
-//                 "layout": "vertical",
-//                 "contents": [],
-//                 "cornerRadius": "30px",
-//                 "width": "12px",
-//                 "height": "12px",
-//                 "borderColor": "#6486E3",
-//                 "borderWidth": "2px"
-//               },
-//               {
-//                 "type": "filler"
-//               }
-//             ],
-//             "flex": 0
-//           },
-//           {
-//             "type": "text",
-//             "text": "Shinjuku",
-//             "gravity": "center",
-//             "flex": 4,
-//             "size": "sm"
-//           }
-//         ],
-//         "spacing": "lg",
-//         "cornerRadius": "30px"
-//       }
-//     ]
-//   }
-// }
+// 天気予報の取得 
+function getTemperatureForecast() {
+  const area = "東京地方"
+  var options =
+      {
+        "contentType" : "text/xml;charset=utf-8",
+        "method" : "get",
+      };
+  var response = UrlFetchApp.fetch("https://www.drk7.jp/weather/xml/13.xml", options); 
+  var xmlDoc = XmlService.parse(response.getContentText());
+  var rootDoc = xmlDoc.getRootElement();
+  var region = parser.getElementById(rootDoc,area);
+  var weather = parser.getElementsByTagName(region, 'weather');
+  var temperature = parser.getElementsByTagName(region, 'range');
+  var rainyPercent = parser.getElementsByTagName(region, 'period');
+  var weathermsg = "■天気予報：" + area + "\n" + weather[0].getValue() + "\n"
+  var tempmsg ="■気温\n" + temperature[0].getValue() + "℃ ～" + temperature[1].getValue() + "℃\n";
+  var umbrellamsg = "■傘予想\n" + getUmbrellNecessary(rainyPercent[1].getValue(),rainyPercent[2].getValue(),rainyPercent[3].getValue()) + "\n";
+  var rainyTemperature = [weathermsg,tempmsg,umbrellamsg];
+  return rainyTemperature
+}
+
+// 傘予想
+function getUmbrellNecessary(mor,eve,nig){
+  var msg = ""
+  if (mor < 30 && eve < 30 && nig < 30 ) {
+    msg = "傘は持たなくても良いね！";
+  }
+  if (mor == 30 || eve == 30 || nig == 30 ) {
+    msg = "折りたたみ傘があると安心！";
+  }
+  if (mor > 30 || eve > 30 || nig > 30 ) {
+    msg = "傘を持って行ったほうが良いね！";
+  }
+  return msg
+}
+
+//　曜日の日本語変換
+function toWD(date){
+  var myTbl = new Array("日","月","火","水","木","金","土","日"); 
+  var myDay = Utilities.formatDate(date, "JST", "u");
+  return "(" + myTbl[myDay] + ")";
+}
