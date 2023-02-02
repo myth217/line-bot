@@ -1,7 +1,14 @@
 {
   "timeZone": "Asia/Tokyo",
   "dependencies": {
-    "enabledAdvancedServices": []
+    "enabledAdvancedServices": [],
+    "libraries": [
+      {
+        "userSymbol": "parser",
+        "version": "5",
+        "libraryId": "1Jrnqmfa6dNvBTzIgTeilzdo6zk0aUUhcXwLlQEbtkhaRR-fi5eAf4tBJ"
+      }
+    ]
   },
   "exceptionLogging": "STACKDRIVER",
   "runtimeVersion": "V8",

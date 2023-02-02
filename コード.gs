@@ -3,15 +3,11 @@
 var line_endpoint = 'https://api.line.me/v2/bot/message/reply';
 const SCRIPT_PROPERTIES = PropertiesService.getScriptProperties();  // スクリプトプロパティを取得
 const ACCESS_TOKEN = SCRIPT_PROPERTIES.getProperty("ACCESS_TOKEN");
-
 const sheet_url = SCRIPT_PROPERTIES.getProperty("sheet_url");
 let spread = SpreadsheetApp.openByUrl(sheet_url);
   // スプレッドシート内のシート一覧を取得
 let sheets = spread.getSheets();
   // 指定したシート(1番目)の左上に書き込み
-
-
-
 
 // イベントを受け取って実行する
 function doPost(e){
@@ -34,9 +30,7 @@ function execute(event){
   else if(EVENT_TYPE === "message"){     //メッセージであった場合
           // メッセージイベントの場合
       if(event.message.type === "text"){    // メッセージでなおかつテキストであった場合
-
           let user_message = event.message.text;      // 受け取ったテキスト
-
           if('メニュー' == user_message) {
             let payload = {
               "replyToken" : REPLY_TOKEN,
@@ -539,7 +533,64 @@ function execute(event){
             };
             sendReplyMessage(payload);
           }
-
+          if ('目的地' == user_message) {
+            let payload = {
+              "replyToken" : REPLY_TOKEN,
+              "messages" : [
+                {
+                  'type':'flex',//ここの宣言が必須
+                  'altText':'目的地',
+                  'contents': {
+                    "type": "bubble",
+                    "body": {
+                      "type": "box",
+                      "layout": "vertical",
+                      "contents": [
+                        {
+                          "type": "text",
+                          "text": "目的地メニュー",
+                          "weight": "bold",
+                          "size": "xl",
+                          "align": "center"
+                        }
+                      ]
+                    },
+                    "footer": {
+                      "type": "box",
+                      "layout": "vertical",
+                      "spacing": "sm",
+                      "contents": [
+                        {
+                          "type": "button",
+                          "style": "primary",
+                          "height": "sm",
+                          "action": {
+                            "type": "uri",
+                            "label": "現在地を送信",
+                            "uri": "https://line.me/R/nv/location/"
+                          }
+                        },
+                        {
+                          "type": "button",
+                          "style": "primary",
+                          "height": "sm",
+                          "action": {
+                            "type": "uri",
+                            "label": "目的地を送信",
+                            "uri": "https://line.me/R/nv/location/"
+                          }
+                        },
+                      ],
+                      
+                      "flex": 0
+                    }
+                  }
+                  
+                }
+              ]
+            };
+            sendReplyMessage(payload);
+          }
           let warikan_flg = sheets[0].getRange(2, 2).getValue();
           if (warikan_flg == true){
             // 整数である
@@ -566,8 +617,6 @@ function execute(event){
                   sendReplyMessage(payload);
               }
           }
-
-
       }
   }
   else if(EVENT_TYPE === "postback"){    // ポストバックイベントの場合
@@ -606,7 +655,6 @@ function execute(event){
     }
   }
 }
-
 // function execute(event){} 内部 で sendReplyMessage()を呼び出す
 function sendReplyMessage(payload){
   const URL = "https://api.line.me/v2/bot/message/reply";
@@ -622,5 +670,73 @@ function sendReplyMessage(payload){
   return RES;
 }
 
+// ＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝line notify＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 
 
+// 通知機能
+function push_message() {
+  var today = new Date();
+  var toWeekday = toWD(today);
+  var msgWeatherForecast = getTemperatureForecast();
+  
+  const token = 'quB2v0kQb6cWgmRhPvgqkQHSQPrK3Dx2zf8DYpUbzyy';
+
+    var options =
+    {
+      "method"  : "post",
+      "payload" : {
+                  //  "imageThumbnail" :"https://cdn-ak.f.st-hatena.com/images/fotolife/y/yukibnb/20190210/20190210134818_120.jpg", //最大240x240pxのJPG画像
+                  //  "imageFullsize" :"https://cdn-ak.f.st-hatena.com/images/fotolife/y/yukibnb/20190210/20190210134818_120.jpg",  //最大1024x1024pxのJPG画像
+                    "message": "今日は" +Utilities.formatDate( today, 'Asia/Tokyo', 'yyyy-M-d') + toWeekday + "だよ！\n"
+                    + msgWeatherForecast[0] + msgWeatherForecast[1] + msgWeatherForecast[2],
+                  }, 
+      "headers" : {"Authorization" : "Bearer "+ token}
+  
+    };
+    UrlFetchApp.fetch("https://notify-api.line.me/api/notify", options);
+  
+}
+
+// 天気予報の取得 
+function getTemperatureForecast() {
+  const area = "東京地方"
+  var options =
+      {
+        "contentType" : "text/xml;charset=utf-8",
+        "method" : "get",
+      };
+  var response = UrlFetchApp.fetch("https://www.drk7.jp/weather/xml/13.xml", options); 
+  var xmlDoc = XmlService.parse(response.getContentText());
+  var rootDoc = xmlDoc.getRootElement();
+  var region = parser.getElementById(rootDoc,area);
+  var weather = parser.getElementsByTagName(region, 'weather');
+  var temperature = parser.getElementsByTagName(region, 'range');
+  var rainyPercent = parser.getElementsByTagName(region, 'period');
+  var weathermsg = "■天気予報：" + area + "\n" + weather[0].getValue() + "\n"
+  var tempmsg ="■気温\n" + temperature[0].getValue() + "℃ ～" + temperature[1].getValue() + "℃\n";
+  var umbrellamsg = "■傘予想\n" + getUmbrellNecessary(rainyPercent[1].getValue(),rainyPercent[2].getValue(),rainyPercent[3].getValue()) + "\n";
+  var rainyTemperature = [weathermsg,tempmsg,umbrellamsg];
+  return rainyTemperature
+}
+
+// 傘予想
+function getUmbrellNecessary(mor,eve,nig){
+  var msg = ""
+  if (mor < 30 && eve < 30 && nig < 30 ) {
+    msg = "傘は持たなくても良いね！";
+  }
+  if (mor == 30 || eve == 30 || nig == 30 ) {
+    msg = "折りたたみ傘があると安心！";
+  }
+  if (mor > 30 || eve > 30 || nig > 30 ) {
+    msg = "傘を持って行ったほうが良いね！";
+  }
+  return msg
+}
+
+//　曜日の日本語変換
+function toWD(date){
+  var myTbl = new Array("日","月","火","水","木","金","土","日"); 
+  var myDay = Utilities.formatDate(date, "JST", "u");
+  return "(" + myTbl[myDay] + ")";
+}
