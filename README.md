@@ -24,6 +24,11 @@ google app sheetをDBとして見立てる
       - line notify api  
       - 天気予報api  
 
+・管理
+github  
+
+github × linebot × gas の管理体制
+
 + 実装済み項目   
        - 割り勘機能  
        - 明日の天気 (自動通知)  
