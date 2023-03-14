@@ -3,7 +3,8 @@
 目的  
 自分たちの実生活の中で使える、意味のあるline bot
 
-bot url
+line bot url  
+https://qr-official.line.me/sid/L/718vwolu.png
 
 開発環境(今回は簡易的なもの)
 
