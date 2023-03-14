@@ -14,11 +14,11 @@ https://qr-official.line.me/sid/L/718vwolu.png
 ・使用言語  
 node.js
 
-・サーバー  
-google app scriptをサーバーとして見立てる  
 
-・DB  
-google app sheetをDBとして見立てる
+使用環境
+google app script  
+google app sheet
+
 
 + 使用api (現在)  
       - line bot api  
