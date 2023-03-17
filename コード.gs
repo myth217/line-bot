@@ -5,10 +5,12 @@ const SCRIPT_PROPERTIES = PropertiesService.getScriptProperties();  // スクリ
 const ACCESS_TOKEN = SCRIPT_PROPERTIES.getProperty("ACCESS_TOKEN");
 const sheet_url = SCRIPT_PROPERTIES.getProperty("sheet_url");
 let spread = SpreadsheetApp.openByUrl(sheet_url);
-  // スプレッドシート内のシート一覧を取得
+// スプレッドシート内のシート一覧を取得
 let sheets = spread.getSheets();
-  // 指定したシート(1番目)の左上に書き込み
+// 指定したシート(1番目)の左上に書き込み
 
+
+// line bot制御
 // イベントを受け取って実行する
 function doPost(e){
   const EVENTS = JSON.parse(e.postData.contents).events;
@@ -672,7 +674,6 @@ function sendReplyMessage(payload){
 
 // ＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝line notify＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 
-
 // 通知機能
 function push_message() {
   var today = new Date();
@@ -740,3 +741,4 @@ function toWD(date){
   var myDay = Utilities.formatDate(date, "JST", "u");
   return "(" + myTbl[myDay] + ")";
 }
+
