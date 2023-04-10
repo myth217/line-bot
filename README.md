@@ -1,7 +1,7 @@
 # line-bot
 
 目的  
-自分たちの実生活の中で使える、意味のあるline bot
+自分たちの実生活用のline bot 
 
 line bot url  
 https://qr-official.line.me/sid/L/718vwolu.png
